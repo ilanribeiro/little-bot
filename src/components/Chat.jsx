@@ -10,11 +10,15 @@ function Chat() {
   const [email, setEmail] = useState('');
   const [rating, setRating] = useState(0);
   const [messages, setMessages] = useState([]);
+  const [flagMessage, setFlagMessage] = useState(false);
   const [conversation, setConversation] = useState({})
 
   useEffect(() => {
-    const messages = api.get('/messages').then((response) => response);
-    setMessages(messages)
+    api.get('/messages').then((response) => setMessages(response.data));
+
+    setTimeout (() => {
+      setFlagMessage(true);
+     }, 2500);
   }, [])
 
   const saveRating = () => {
@@ -37,11 +41,15 @@ function Chat() {
   }
 
   const renderMessage1 = () => {
-    if(!messages) return null;
-      
+    if(!messages || !flagMessage) {
+      return (
+        <p>digitando...</p>
+      )
+    }
+
     return (
       <div id="1" className="messages">
-        <p>Olá, eu sou Chatnilson, tudo bem? Para começarmos, preciso saber seu nome.</p>
+        <p>{ messages[0].message }</p>
         <input id="input1" type="text"/>
         <button onClick={clickMessage1} >seta</button>
       </div>
@@ -53,7 +61,7 @@ function Chat() {
   
     return (
       <div className="messages 2">
-        <p>Que satisfação <span>{fullName}</span>! <br/> Agora que sei seu nome, qual a cidade e estado que você mora?</p>
+        <p>Que satisfação <span>{fullName}</span>! <br/> { messages[1].message }</p>
         <input id="input2" type="text"/>
         <button onClick={clickMessage2}>seta</button>
       </div>
@@ -65,7 +73,7 @@ function Chat() {
   
     return (
       <div className="messages 3">
-        <p>Legal, agora que sabemos sua cidade e estado. Quando foi que você nasceu?</p>
+        <p>{ messages[2].message }</p>
         <input id="input3" type="date" name="birth" />
         <button onClick={clickMessage3} >seta</button>
       </div>
@@ -77,7 +85,7 @@ function Chat() {
   
     return (
       <div className="messages 4">
-        <p>Agora me fala teu e-mail, por gentileza.</p>
+        <p>{ messages[3].message }</p>
         <input type="email" name="email" id="input4"/>
         <button onClick={clickMessage4} >seta</button>
       </div>
@@ -90,7 +98,7 @@ function Chat() {
     return (
       <div>
         <div className="messages 5">
-          <p>Você finalizou o teste Faça uma avaliação sobre o processo que realizou até chegar aqui. Nós agradecemos!</p>
+          <p>{ messages[4].message }</p>
           <input type="number" step="1" max="5" name="rating" id="input5"/>
         </div>
         <button onClick={saveInfo} >SALVAR</button>
@@ -128,7 +136,7 @@ function Chat() {
           {renderMessage3(city)}
           {renderMessage4(birth)}
           {renderMessage5(email)}
-          
+          {/* <button onClick={() => console.log(messages)} >teste</button> */}
         </div>
 
       </main>
