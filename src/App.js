@@ -7,6 +7,26 @@ function App() {
   const [birth, setBirth] = useState('');
   const [email, setEmail] = useState('');
   const [rating, setRating] = useState(0);
+  const [conversation, setConversation] = useState({})
+
+  const saveRating = () => {
+    const ratingValue = document.getElementById('input5').value;
+    setRating(ratingValue);
+  }
+
+  const saveInfo = () => {
+    saveRating();
+    const conversationInfo = {
+      fullName,
+      city,
+      birth,
+      email,
+      rating
+    }
+    console.log(`conversationInfo`, conversationInfo)
+    setConversation(conversationInfo)
+    alert('Dados salvos e enviados')
+  }
 
   const renderMessage2 = (fullName) => {
     if(!fullName) return null
@@ -14,8 +34,8 @@ function App() {
     return (
       <div className="messages 2">
         <p>Que satisfação <span>{fullName}</span>! <br/> Agora que sei seu nome, qual a cidade e estado que você mora?</p>
-        <input type="text"/>
-        <button>seta</button>
+        <input id="input2" type="text"/>
+        <button onClick={clickMessage2}>seta</button>
       </div>
     );
   };
@@ -26,8 +46,34 @@ function App() {
     return (
       <div className="messages 3">
         <p>Legal, agora que sabemos sua cidade e estado. Quando foi que você nasceu?</p>
-        <input type="text"/>
-        <button>seta</button>
+        <input id="input3" type="date" name="birth" />
+        <button onClick={clickMessage3} >seta</button>
+      </div>
+    );
+  };
+
+  const renderMessage4 = (birth) => {
+    if(!birth) return null
+  
+    return (
+      <div className="messages 4">
+        <p>Agora me fala teu e-mail, por gentileza.</p>
+        <input type="email" name="email" id="input4"/>
+        <button onClick={clickMessage4} >seta</button>
+      </div>
+    );
+  };
+
+  const renderMessage5 = (email) => {
+    if(!email) return null
+  
+    return (
+      <div>
+        <div className="messages 5">
+          <p>Você finalizou o teste Faça uma avaliação sobre o processo que realizou até chegar aqui. Nós agradecemos!</p>
+          <input type="number" step="1" max="5" name="rating" id="input5"/>
+        </div>
+        <button onClick={saveInfo} >SALVAR</button>
       </div>
     );
   };
@@ -38,7 +84,19 @@ function App() {
   }
 
   const clickMessage2 = () => {
-    setCity(target.value);
+    const cityValue = document.getElementById('input2').value;
+    setCity(cityValue);
+  }
+
+  const clickMessage3 = () => {
+    const birthValue = document.getElementById('input3').value;
+    setBirth(birthValue);
+    console.log(birth)
+  }
+
+  const clickMessage4 = () => {
+    const emailValue = document.getElementById('input4').value;
+    setEmail(emailValue);
   }
 
   return (
@@ -55,28 +113,9 @@ function App() {
           </div>
           {renderMessage2(fullName)}
           {renderMessage3(city)}
-          <div className="messages 2" hidden>
-            <p>Que satisfação {fullName} Agora que sei seu nome, qual a cidade e estado que você mora?</p>
-            <input type="text"/>
-            <button>seta</button>
-          </div>
-
-          <div className="messages 3" hidden>
-            <p>Legal, agora que sabemos sua cidade e estado. Quando foi que você nasceu?</p>
-            <input type="text"/>
-            <button>seta</button>
-          </div>
-
-          <div className="messages 4" hidden>
-            <p>Agora me fala teu e-mail, por gentileza.</p>
-            <input type="text"/>
-            <button>seta</button>
-          </div>
-
-          <div className="messages 5" hidden>
-            <p>Você finalizou o teste Faça uma avaliação sobre o processo que realizou até chegar aqui. Nós agradecemos!</p>
-            <button>seta</button>
-          </div>
+          {renderMessage4(birth)}
+          {renderMessage5(email)}
+          
         </div>
 
       </main>
