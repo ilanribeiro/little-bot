@@ -25,6 +25,7 @@ body {
 
 .main-container {
   max-width: 25%;
+  min-width: 250px;
   margin: auto;
   margin-top: 0;
   height: 100vh;
@@ -46,5 +47,18 @@ body {
 }
 
 .messages input {
+  margin-top: 10px;
+}
+
+.card {
+  display: block;
+  margin-top: 20px;
+}
+
+.errorMessage {
+  display: block;
+}
+
+.field {
   margin-top: 10px;
 }
