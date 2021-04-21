@@ -4,10 +4,11 @@ import * as Yup from 'yup';
 import Icon from '@material-ui/core/Icon';
 import FormRatings from 'form-ratings';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-
 import { cities } from '../services/cities';
+
 import api from '../services/api';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 const ChatFormik = () => {
   const messageEl = useRef(null);
@@ -48,7 +49,9 @@ const ChatFormik = () => {
           <Field id="standard-basic" name="fullName" type="text" className="field"/>
           <Icon className="button">send</Icon>
         </div>
-        <ErrorMessage name="fullName" className="errorMessage"/>
+        <div className="errorMessage">
+          <ErrorMessage name="fullName" />
+        </div>
       </div>
     );
   }
@@ -67,32 +70,39 @@ const ChatFormik = () => {
           fullName: Yup.string()
             .max(15, 'Deve ter 15 caracteres ou menos')
             .required('Este campo é necessário'),
+          city: Yup.string().required('Este campo é necessário'),
+          birth: Yup.string().required('Este campo é necessário'),
           email: Yup.string()
             .email('Email informado é inválido')
             .required('Este campo é necessário'),
+          rating: Yup.number().required('Este campo é necessário')
         })}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
+            const savedInfo = JSON.stringify(values, null, 2);
+            api.post('/person', savedInfo)
             setSubmitting(false);
           }, 400)
         }}
         >
+
           {formik => (
             <form onSubmit={formik.handleSubmit}>
               <div className="chat-container" ref={messageEl}>
+                
                 {renderMessage1()}
 
                 {formik.touched.fullName && !formik.errors.fullName ? (
                   <div className="card">
+
                     <div className="askBot">
                       <label htmlFor="city">{`Que satisfação ${formik.values.fullName}!`} { ask[1].message }</label>
                     </div>
+
                     <div className="answer">
                       <Field name="city" as="select" type="text" className="field">
                         <option name="city" value="none"></option>
-                        {cities
-                          .map(combo => combo.cidades
+                        {cities.map(combo => combo.cidades
                           .map((city, index) => (
                           <option
                             name="city"
@@ -106,15 +116,21 @@ const ChatFormik = () => {
                       </Field>
                       <Icon type="button">send</Icon>
                     </div>
-                    <ErrorMessage name="city" className="errorMessage"/>
+
+                    <div className="errorMessage">
+                      <ErrorMessage name="city" />
+                    </div>
+
                   </div>
                 ) : null}
 
                 {formik.touched.city && !formik.errors.city ? (
                   <div className="card">
+
                     <div className="askBot">
                       <label htmlFor="birth">{ ask[2].message }</label>
                     </div>
+
                     <div className="answer">
                       <DatePicker
                         name="birth"
@@ -128,35 +144,52 @@ const ChatFormik = () => {
                       />
                       <Icon type="button">send</Icon>
                     </div>
-                    <ErrorMessage name="birth" className="errorMessage"/>
+
+                    <div className="errorMessage">
+                      <ErrorMessage name="birth" />
+                    </div>
+
                   </div>
                 ) : null}
 
                 {formik.touched.birth && !formik.errors.birth ? (
                   <div className="card">
+
                     <div className="askBot">
                       <label htmlFor="email">{ ask[3].message }</label>
                     </div>
+
                     <div className="answer">
                       <Field name="email" type="email" className="field"/>
                       <Icon type="button">send</Icon>
                     </div>
-                    <ErrorMessage name="email" className="errorMessage"/>
+
+                    <div className="errorMessage">
+                      <ErrorMessage name="email" />
+                    </div>
+
                   </div>
                 ) : null}
 
                 {formik.touched.email && !formik.errors.email ? (
                   <div className="card">
+
                     <div className="askBot">
                       <label htmlFor="rating">{ ask[4].message }</label>
                     </div>
+
                     <div className="answer starField">
                       <Field name="rating" as={FormRatings} />
                     </div>
-                    <ErrorMessage name="rating" className="errorMessage"/>
+
+                    <div className="errorMessage">
+                      <ErrorMessage name="rating" />
+                    </div>
+
                     <button type="submit" className="saveButton">
                       Salvar
                     </button>
+                    
                   </div>
                 ) : null}
               </div>
